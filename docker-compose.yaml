@@ -1,0 +1,13 @@
+version: "3.7"
+
+services: 
+    name-server:
+        image: ezazulhaq02/naming-server:0.0.1-SNAPSHOT
+        mem_limit: 700m
+        ports: 
+            - 8760:8760
+        networks: 
+            - currency-network
+
+networks: 
+    currency-network:
