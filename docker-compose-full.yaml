@@ -1,0 +1,60 @@
+version: "3.7"
+
+services: 
+    currency-exchange:
+        depends_on: 
+            - naming-server
+        image: ezazulhaq02/currency-exchnage-service:0.0.1-SNAPSHOT
+        mem_limit: 1G
+        ports: 
+            - 8001:8001
+        networks: 
+            - currency-network
+        environment: 
+            EUREKA.CLIENT.SERVICEURL.DEFAULTZONE: http://naming-server:8760/eureka
+            SPRING.ZIPKIN.BASEURL: http://zipKin-server:9411/
+
+    currency-conversion:
+        depends_on: 
+            - naming-server
+        image: ezazulhaq02/currency-conversion-service:0.0.1-SNAPSHOT
+        mem_limit: 1G
+        ports: 
+            - 8101:8101
+        networks: 
+            - currency-network
+        environment: 
+            EUREKA.CLIENT.SERVICEURL.DEFAULTZONE: http://naming-server:8760/eureka
+            SPRING.ZIPKIN.BASEURL: http://zipKin-server:9411/
+
+    api-gateway:
+        depends_on: 
+            - naming-server
+        image: ezazulhaq02/api-gateway:0.0.1-SNAPSHOT
+        mem_limit: 1G
+        ports: 
+            - 8765:8765
+        networks: 
+            - currency-network
+        environment: 
+            EUREKA.CLIENT.SERVICEURL.DEFAULTZONE: http://naming-server:8760/eureka
+            SPRING.ZIPKIN.BASEURL: http://zipKin-server:9411/
+
+    naming-server:
+        image: ezazulhaq02/naming-server:0.0.1-SNAPSHOT
+        mem_limit: 1G
+        ports: 
+            - 8760:8760
+        networks: 
+            - currency-network
+
+    zipKin-server:
+        image: openzipkin/zipkin:2.23
+        mem_limit: 500m
+        ports: 
+            - 9411:9411
+        networks: 
+            - currency-network
+
+networks: 
+    currency-network:
